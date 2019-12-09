@@ -17,7 +17,7 @@ export default class Chat extends Component {
   intervalID = null
 
   async componentDidMount() {
-    const msg = await Axios.get('?endpoint');
+    const msg = await Axios.get('/messages?endpoint');
     const messages = msg.data;
     const lastMessage = messages[messages.length - 1];
     this.setState({ messages, lastMessage });
@@ -27,7 +27,7 @@ export default class Chat extends Component {
   newMsg = () => {
     this.intervalID = setInterval(async () => {
       const date = this.state.lastMessage.datetime;
-      const msg = await Axios.get(`?datetime=${date}`);
+      const msg = await Axios.get(`/messages?datetime=${date}`);
       const newMsg = msg.data;
       if (newMsg.length) {
         this.setState(prevState => ({ messages: [...prevState.messages, ...newMsg], lastMessage: newMsg[newMsg.length - 1] }))
@@ -49,7 +49,7 @@ export default class Chat extends Component {
     data.set('message', this.state.sendMessage.message)
     data.set('author', this.state.sendMessage.author)
     try {
-      Axios.post('http://146.185.154.90:8000/messages', data)
+      Axios.post('/messages', data)
     } catch (error) {
       console.log('Error');
     }
